@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maktab · O’quvchilar bazasi</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f6fb;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--pri:#4f46e5;--pri2:#7c3aed;--ok:#059669;--warn:#d97706;--bad:#dc2626;--chip:#eef2ff;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#141a2e;--ink:#e8ecf8;--mut:#94a3b8;--line:#243049;--pri:#818cf8;--pri2:#a78bfa;--chip:#1e2547;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#141a2e;--ink:#e8ecf8;--mut:#94a3b8;--line:#243049;--pri:#818cf8;--pri2:#a78bfa;--chip:#1e2547;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+header{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:20px;padding:20px;display:flex;gap:14px;align-items:center;box-shadow:0 10px 30px -10px var(--pri)}
+.logo{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:26px}
+header h1{margin:0;font-size:20px}header p{margin:2px 0 0;opacity:.85;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+@media(min-width:700px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat b{display:block;font-size:24px}.stat span{color:var(--mut);font-size:12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--chip)}
+.bar .s{flex:1 1 200px}.bar select{flex:0 0 auto;width:auto}
+button{font:inherit;border:0;border-radius:12px;padding:11px 16px;cursor:pointer;background:var(--pri);color:#fff;font-weight:600}
+button.g{background:var(--chip);color:var(--pri)}button.d{background:transparent;color:var(--bad)}
+.list{display:grid;gap:10px}
+@media(min-width:700px){.list{grid-template-columns:1fr 1fr}}
+.row{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:12px;cursor:pointer;transition:transform .15s}
+.row:active{transform:scale(.99)}
+.av{flex:0 0 46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+.info{min-width:0;flex:1}.info h3{margin:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info small{color:var(--mut)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{background:var(--chip);color:var(--pri);border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600}
+.chip.ok{background:#d1fae5;color:#047857}.chip.warn{background:#fef3c7;color:#b45309}.chip.bad{background:#fee2e2;color:#b91c1c}
+.empty{text-align:center;color:var(--mut);padding:40px 10px}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:22px}}
+.sheet h2{margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .f{grid-column:1/-1}
+label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
+.act{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:10px 0}dt{color:var(--mut)}dd{margin:0;font-weight:600;text-align:right}
+.note{font-size:12px;color:var(--mut);text-align:center;margin:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">🏫</div><div><h1>O’quvchilar bazasi</h1><p>Maktab ma’lumotlar boshqaruv paneli</p></div></header>
+<div class="stats">
+<div class="stat"><b id="s1">0</b><span>Jami o’quvchilar</span></div>
+<div class="stat"><b id="s2">0</b><span>Sinflar soni</span></div>
+<div class="stat"><b id="s3">0</b><span>O’rtacha baho</span></div>
+<div class="stat"><b id="s4">0%</b><span>O’rtacha davomat</span></div>
+</div>
+<div class="bar">
+<input class="s" id="q" placeholder="🔍 Ism, telefon yoki manzil bo’yicha qidiruv">
+<select id="fc"><option value="">Barcha sinflar</option></select>
+<select id="so"><option value="name">A–Z</option><option value="grade">Baho ↓</option><option value="att">Davomat ↓</option></select>
+</div>
+<div class="bar"><button id="add">＋ Yangi o’quvchi</button><button class="g" id="csv">⬇ CSV yuklab olish</button></div>
+<div class="list" id="list"></div>
+<p class="note" id="note"></p>
+</div>
+
+<div class="modal" id="m"><div class="sheet" id="sh"></div></div>
+
+<script>
+(function(){
+var S=[],db=null,col=null,live=false;
+var $=function(i){return document.getElementById(i)};
+var cols=['#4f46e5','#7c3aed','#0891b2','#059669','#d97706','#db2777','#2563eb'];
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function full(s){return (s.ism||'')+' '+(s.familiya||'')}
+function col2(s){var n=0,t=full(s);for(var i=0;i<t.length;i++)n+=t.charCodeAt(i);return cols[n%cols.length]}
+function render(){
+ var q=$('q').value.toLowerCase().trim(),fc=$('fc').value,so=$('so').value;
+ var r=S.filter(function(s){return(!fc||s.sinf===fc)&&(!q||(full(s)+' '+(s.tel||'')+' '+(s.manzil||'')+' '+(s.ota||'')).toLowerCase().indexOf(q)>-1)});
+ r.sort(function(a,b){return so==='grade'?(b.baho||0)-(a.baho||0):so==='att'?(b.davomat||0)-(a.davomat||0):full(a).localeCompare(full(b))});
+ $('list').innerHTML=r.length?r.map(function(s){
+  var b=+s.baho||0,bc=b>=4.5?'ok':b>=3.5?'warn':'bad';
+  return '<div class="row" data-id="'+esc(s.id)+'"><div class="av" style="background:'+col2(s)+'">'+esc((s.ism||'?')[0]+(s.familiya||'')[0]).toUpperCase()+'</div><div class="info"><h3>'+esc(full(s))+'</h3><small>'+esc(s.tel||'Telefon yo’q')+'</small><div class="chips"><span class="chip">'+esc(s.sinf||'—')+'</span><span class="chip '+bc+'">Baho '+b.toFixed(1)+'</span><span class="chip">Davomat '+(s.davomat||0)+'%</span></div></div></div>'}).join(''):'<div class="empty">📭<br>O’quvchi topilmadi.<br>“Yangi o’quvchi” tugmasi bilan qo’shing.</div>';
+ var cl={};S.forEach(function(s){if(s.sinf)cl[s.sinf]=1});
+ var keys=Object.keys(cl).sort(),cur=$('fc').value;
+ $('fc').innerHTML='<option value="">Barcha sinflar</option>'+keys.map(function(k){return '<option'+(k===cur?' selected':'')+'>'+esc(k)+'</option>'}).join('');
+ $('s1').textContent=S.length;$('s2').textContent=keys.length;
+ var n=S.length||1;
+ $('s3').textContent=S.length?(S.reduce(function(a,s){return a+(+s.baho||0)},0)/n).toFixed(2):'0';
+ $('s4').textContent=S.length?Math.round(S.reduce(function(a,s){return a+(+s.davomat||0)},0)/n)+'%':'0%';
+ $('note').textContent=live?'🟢 Ma’lumotlar bulutda saqlanadi':'⚪ Demo rejim: ma’lumotlar saqlanmaydi';
+}
+function open(h){$('sh').innerHTML=h;$('m').classList.add('on')}
+function close(){$('m').classList.remove('on')}
+function form(s){
+ s=s||{};var v=function(k,d){return esc(s[k]!=null?s[k]:(d||''))};
+ open('<h2>'+(s.id?'Tahrirlash':'Yangi o’quvchi')+'</h2><div class="grid">'+
+ '<div><label>Ism</label><input id="f_ism" value="'+v('ism')+'"></div><div><label>Familiya</label><input id="f_familiya" value="'+v('familiya')+'"></div>'+
+ '<div><label>Sinf (masalan 7-A)</label><input id="f_sinf" value="'+v('sinf')+'"></div><div><label>Jins</label><select id="f_jins"><option'+(s.jins==='O’g’il'?' selected':'')+'>O’g’il</option><option'+(s.jins==='Qiz'?' selected':'')+'>Qiz</option></select></div>'+
+ '<div><label>Tug’ilgan sana</label><input type="date" id="f_tugilgan" value="'+v('tugilgan')+'"></div><div><label>Telefon</label><input id="f_tel" inputmode="tel" value="'+v('tel')+'"></div>'+
+ '<div class="f"><label>Ota-ona / vasiy</label><input id="f_ota" value="'+v('ota')+'"></div><div class="f"><label>Manzil</label><input id="f_manzil" value="'+v('manzil')+'"></div>'+
+ '<div><label>O’rtacha baho (1–5)</label><input type="number" step="0.1" min="1" max="5" id="f_baho" value="'+v('baho')+'"></div><div><label>Davomat (%)</label><input type="number" min="0" max="100" id="f_davomat" value="'+v('davomat')+'"></div></div>'+
+ '<div class="act"><button class="g" id="x">Bekor</button><button id="ok">Saqlash</button></div>');
+ $('x').onclick=close;
+ $('ok').onclick=function(){
+  var d={};['ism','familiya','sinf','jins','tugilgan','tel','ota','manzil'].forEach(function(k){d[k]=$('f_'+k).value.trim()});
+  d.baho=Math.min(5,Math.max(0,+$('f_baho').value||0));d.davomat=Math.min(100,Math.max(0,+$('f_davomat').value||0));
+  if(!d.ism||!d.familiya){alert('Ism va familiya majburiy');return}
+  save(s.id||('s'+Date.now().toString(36)),d);close();
+ };
+}
+function save(id,d){
+ d.id=id;
+ if(col){col.doc(id).set(d).catch(function(e){alert('Saqlab bo’lmadi: ruxsat yo’q yoki tarmoq xatosi')})}
+ else{var i=S.findIndex(function(x){return x.id===id});if(i>-1)S[i]=d;else S.push(d);render()}
+}
+function del(id){
+ if(col){col.doc(id).delete().catch(function(){alert('O’chirib bo’lmadi')})}
+ else{S=S.filter(function(x){return x.id!==id});render()}
+}
+function view(id){
+ var s=S.find(function(x){return x.id===id});if(!s)return;
+ open('<h2>'+esc(full(s))+'</h2><span class="chip">'+esc(s.sinf||'—')+'</span><dl>'+
+ [['Jins',s.jins],['Tug’ilgan sana',s.tugilgan],['Telefon',s.tel],['Ota-ona',s.ota],['Manzil',s.manzil],['O’rtacha baho',s.baho],['Davomat',(s.davomat||0)+'%']].map(function(p){return '<dt>'+p[0]+'</dt><dd>'+esc(p[1]||'—')+'</dd>'}).join('')+
+ '</dl><div class="act"><button class="d" id="dl">O’chirish</button><button class="g" id="x">Yopish</button><button id="ed">Tahrirlash</button></div>');
+ $('x').onclick=close;$('ed').onclick=function(){form(s)};
+ $('dl').onclick=function(){if(confirm('Rostdan o’chirilsinmi?')){del(id);close()}};
+}
+$('list').onclick=function(e){var r=e.target.closest('.row');if(r)view(r.getAttribute('data-id'))};
+$('add').onclick=function(){form()};
+$('m').onclick=function(e){if(e.target===$('m'))close()};
+['q','fc','so'].forEach(function(i){$(i).oninput=render});
+$('csv').onclick=async function(){
+ var h=['ism','familiya','sinf','jins','tugilgan','tel','ota','manzil','baho','davomat'];
+ var t='\ufeff'+h.join(',')+'\n'+S.map(function(s){return h.map(function(k){return '"'+String(s[k]==null?'':s[k]).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+ try{var dw=await claude.use('downloads');if(dw){await dw.save({filename:'oquvchilar.csv',data:t});return}}catch(e){}
+ alert('Yuklab olish bu yerda mavjud emas');
+};
+render();
+(async function(){
+ try{
+  db=await claude.use('db');
+  if(db){col=db.collection('students');live=true;
+   col.onSnapshot(function(snap){S=snap.docs.map(function(d){var x=d.data();x.id=d.id;return x});render()},function(){live=false;col=null;render()});
+  }
+ }catch(e){}
+ render();
+})();
+})();
+</script>
+</body>
+</html>
